@@ -22,12 +22,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('refresh', [App\Http\Controllers\AuthController::class, 'refresh']);
     Route::get('user', [App\Http\Controllers\AuthController::class, 'getUser']);
 });
-Route::get('/users', [App\Http\Controllers\UserController::class, 'getUsers']);
-Route::post('/users', [App\Http\Controllers\UserController::class, 'addUser']);
-Route::post('/user/{id}', [App\Http\Controllers\UserController::class, 'editUser']);
-Route::delete('/user/{id}', [App\Http\Controllers\UserController::class, 'deleteUser']);
-
-Route::get('/roles', [App\Http\Controllers\RoleController::class, 'getRoles']);
 
 Route::get('/folder', [App\Http\Controllers\FolderController::class, 'getFolder']);
 Route::post('/upload', [App\Http\Controllers\FileController::class, 'uploadFile']);
@@ -38,5 +32,3 @@ Route::post('/createfile', [App\Http\Controllers\FileController::class, 'createF
 Route::post('/renamefile', [App\Http\Controllers\FileController::class, 'renameFile']);
 Route::post('/deletefiles', [App\Http\Controllers\FileController::class, 'deleteFiles']);
 Route::post('/editfile', [App\Http\Controllers\FileController::class, 'editfile']);
-
-Route::post('/folder/role', [App\Http\Controllers\FolderController::class, 'setFolderRole']);

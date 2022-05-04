@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Role;
 use App\Mail\SendMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -21,21 +20,13 @@ class AuthController extends Controller
             return response(null, 401);
         }
         $user = Auth::user();
-        $roles = [];
-        foreach(Auth::user()->roles()->get() as $role) {
-            array_push($roles, $role->name);
-        }
         $access_token = $token;
-        return response()->json(compact('user', 'roles', 'access_token'));
+        return response()->json(compact('user', 'access_token'));
     }
 
     public function getUser(Request $request) {
         if (($user = Auth::user())) {
-            $roles = [];
-            foreach(Auth::user()->roles()->get() as $role) {
-                array_push($roles, $role->name);
-            }
-            return response()->json(compact('user', 'roles'));
+            return response()->json(compact('user'));
         }
         return response()->json(['message' => 'Unauthenticated'], 401);
     }
