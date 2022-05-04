@@ -1,0 +1,42 @@
+image: appwisebe/laravel-docker:7.4
+
+definitions:
+  caches:
+    composer-cache: /composer/cache
+
+  steps:
+    - step: &Deploy
+        name: Deploy to Development
+        deployment: development
+        caches:
+          - composer-cache
+        script:
+          - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+          - composer dump-autoload --optimize --classmap-authoritative
+          - >
+            rsync -crltDzv . $DEPLOY_URL:www/htdocs --delete-delay
+            --exclude=.env
+            --exclude=.git
+            --include='public/index.php'
+            --exclude='public/*'
+            --exclude=storage/logs
+            --exclude=storage/data
+            --exclude=storage/framework/sessions
+            --exclude=storage/framework/cache
+            --exclude=storage/oauth-private.key
+            --exclude=storage/oauth-public.key
+          - ssh $DEPLOY_URL sh www/htdocs/post-deploy.sh
+
+pipelines:
+  branches:
+    master:
+      - step:
+          <<: *Deploy
+          name: Deploy to Development
+          deployment: development
+
+      - step:
+          <<: *Deploy
+          name: Deploy to Production
+          deployment: production
+          trigger: manual

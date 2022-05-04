@@ -30,13 +30,7 @@ Route::delete('/user/{id}', [App\Http\Controllers\UserController::class, 'delete
 Route::get('/roles', [App\Http\Controllers\RoleController::class, 'getRoles']);
 
 Route::get('/folder', [App\Http\Controllers\FolderController::class, 'getFolder']);
-Route::post('/upload', [App\Http\Controllers\FileController::class, 'uploadFile']);
 Route::post('/file', [App\Http\Controllers\FileController::class, 'downloadFile']);
 Route::post('/readfile', [App\Http\Controllers\FileController::class, 'readFile']);
-Route::post('/createfolder', [App\Http\Controllers\FileController::class, 'createFolder']);
-Route::post('/createfile', [App\Http\Controllers\FileController::class, 'createFile']);
-Route::post('/renamefile', [App\Http\Controllers\FileController::class, 'renameFile']);
-Route::post('/deletefiles', [App\Http\Controllers\FileController::class, 'deleteFiles']);
-Route::post('/editfile', [App\Http\Controllers\FileController::class, 'editfile']);
 
 Route::post('/folder/role', [App\Http\Controllers\FolderController::class, 'setFolderRole']);
