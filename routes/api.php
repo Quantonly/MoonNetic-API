@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'auth'], function () {
+    Route::post('register', [App\Http\Controllers\AuthController::class, 'register']);
     Route::post('login', [App\Http\Controllers\AuthController::class, 'login']);
     Route::post('forgot', [App\Http\Controllers\AuthController::class, 'forgot']);
     Route::post('update', [App\Http\Controllers\AuthController::class, 'update']);

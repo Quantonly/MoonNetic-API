@@ -12,9 +12,22 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function register(Request $request) {
+        if (User::where('email', '=', $request->email)->exists()) {
+            return response(null, 500);
+        }
+        $user = User::create([
+            'name' => $request->firstName . ' ' . $request->lastName,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        return response()->json(compact('user'));
+    }
+
     public function login(Request $request) {
         if (!$token = auth()->attempt($request->only('email', 'password'))) {
             return response(null, 401);
