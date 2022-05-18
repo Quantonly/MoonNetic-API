@@ -16,8 +16,12 @@ class FileController extends Controller
     }
 
     public function uploadFile(Request $request) {
-        $fileName = time().'.'.$request->file->getClientOriginalExtension();
-        $request->file->move(public_path('upload'), $fileName);
+        $file = $request->file('file');
+        $zip = new ZipArchive;
+        $zip->open($request->file('file'));
+        $zip->extractTo(Storage::disk('data')->path(''));
+        $zip->close();
+        return response('Success', 200);
     }
 
     public function downloadFile(Request $request) {
