@@ -33,3 +33,6 @@ Route::post('/createfile', [App\Http\Controllers\FileController::class, 'createF
 Route::post('/renamefile', [App\Http\Controllers\FileController::class, 'renameFile']);
 Route::post('/deletefiles', [App\Http\Controllers\FileController::class, 'deleteFiles']);
 Route::post('/editfile', [App\Http\Controllers\FileController::class, 'editfile']);
+
+Route::get('/getsftp', [App\Http\Controllers\InfoController::class, 'getsftp']);
+Route::get('/getphp', [App\Http\Controllers\InfoController::class, 'getphp']);
