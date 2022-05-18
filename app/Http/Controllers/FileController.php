@@ -9,13 +9,19 @@ use File;
 
 class FileController extends Controller
 {
+
     public function  __construct() {
         $this->middleware(['auth:api']);
+        $this->userPath = Storage::disk('data');
     }
 
     public function uploadFile(Request $request) {
-        $fileName = time().'.'.$request->file->getClientOriginalExtension();
-        $request->file->move(public_path('upload'), $fileName);
+        $file = $request->file('file');
+        $zip = new ZipArchive;
+        $zip->open($request->file('file'));
+        $zip->extractTo(Storage::disk('data')->path(''));
+        $zip->close();
+        return response('Success', 200);
     }
 
     public function downloadFile(Request $request) {
@@ -91,9 +97,7 @@ class FileController extends Controller
         }
     }
 
-    // editFile API
-    public function editfile(string $content, string $path) {
-        file_put_contents($path, $content);
+    public function editFile(Request $request) {
+        file_put_contents(Storage::disk('data')->path($request->input('path')), $request->input('content'));
     }
-    //
 }
