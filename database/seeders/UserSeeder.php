@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
             'email' => 'test.test@test.com',
             'password' => Hash::make('test1234'),
         ]);
-        $website = Website::create([
+        $website = WebsiteUser::create([
             'user_id' => 1,
             'sub_domain' => 'codyvolz',
             'server_ip' => '172.26.5.10',
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
             'php_password' => Str::random(10),
             'php_version' => '7.4'
         ]);
-        $website = Website::create([
+        $website = WebsiteUser::create([
             'user_id' => 2,
             'sub_domain' => 'testaccount',
             'server_ip' => '172.26.5.10',
