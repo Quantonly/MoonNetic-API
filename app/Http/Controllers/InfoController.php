@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\WebsiteUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class InfoController extends Controller
 {
@@ -35,6 +37,11 @@ class InfoController extends Controller
             $website->php_password = Str::random(10);
             $website->php_version = $request->input('phpVersion');
             $website->save();
+            $process = new Process(['/usr/scripts/create_website.sh']);
+            $process->run();
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
             return response('Success', 200);
         }
         return response(null, 500);
