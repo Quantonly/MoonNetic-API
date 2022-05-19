@@ -6,11 +6,38 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\WebsiteUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class InfoController extends Controller
 {
     public function  __construct() {
         $this->middleware(['auth:api']);
+    }
+
+    public function createWebsite(Request $request) {
+        $user = Auth::user();
+        $serverIp = '172.26.5.10';
+        if (!WebsiteUser::where('user_id', '=', $user->id)->exists()) {
+            if (WebsiteUser::where('sub_domain', '=', $request->input('subDomain'))->exists()) {
+                return response(null, 500);
+            }
+            $website = new WebsiteUser;
+            $website->user_id = $user->id;
+            $website->sub_domain = $request->input('subDomain');
+            $website->server_ip = $serverIp;
+            $website->sftp_username = Str::random(10);
+            $website->sftp_password = Str::random(10);
+            $website->sftp_host = 'moonnetic.com';
+            $website->sftp_port = '22';
+            $website->php_host = 'moonnetic.com';
+            $website->php_database = 'db_' . Str::random(10);
+            $website->php_username = Str::random(10);
+            $website->php_password = Str::random(10);
+            $website->php_version = $request->input('phpVersion');
+            $website->save();
+            return response('Success', 200);
+        }
+        return response(null, 500);
     }
 
     public function getWebsites(Request $request) {
