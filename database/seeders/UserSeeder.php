@@ -29,6 +29,7 @@ class UserSeeder extends Seeder
         ]);
         $server = Server::create([
             'user_id' => 1,
+            'sub_domain' => 'codyvolz',
             'server_ip' => '172.26.5.10',
             'sftp_username' => Str::random(10),
             'sftp_password' => Str::random(10),
@@ -42,6 +43,7 @@ class UserSeeder extends Seeder
         ]);
         $server = Server::create([
             'user_id' => 2,
+            'sub_domain' => 'testaccount',
             'server_ip' => '172.26.5.10',
             'sftp_username' => Str::random(10),
             'sftp_password' => Str::random(10),
