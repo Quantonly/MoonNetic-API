@@ -34,5 +34,6 @@ Route::post('/renamefile', [App\Http\Controllers\FileController::class, 'renameF
 Route::post('/deletefiles', [App\Http\Controllers\FileController::class, 'deleteFiles']);
 Route::post('/editfile', [App\Http\Controllers\FileController::class, 'editfile']);
 
-Route::get('/getsftp', [App\Http\Controllers\InfoController::class, 'getsftp']);
-Route::get('/getphp', [App\Http\Controllers\InfoController::class, 'getphp']);
+Route::get('/getwebsites', [App\Http\Controllers\InfoController::class, 'getWebsites']);
+Route::get('/getsftp', [App\Http\Controllers\InfoController::class, 'getSFTP']);
+Route::get('/getphp', [App\Http\Controllers\InfoController::class, 'getPHP']);
