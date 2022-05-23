@@ -37,7 +37,7 @@ return [
 
         'data' => [
             'driver' => 'local',
-            'root' => storage_path('data'),
+            'root' => '/mnt/domains',
         ],
 
         'public' => [

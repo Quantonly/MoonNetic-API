@@ -12,14 +12,16 @@ class FileController extends Controller
 
     public function  __construct() {
         $this->middleware(['auth:api']);
-        $this->userPath = Storage::disk('data');
+        $user = Auth::user();
+        $subDomain = WebsiteUser::where('user_id', '=', $user->id)->first()->sub_domain;
+        $this->path = $subDomain.'/'.$subDomain;
     }
 
     public function uploadFile(Request $request) {
         $file = $request->file('file');
         $zip = new ZipArchive;
         $zip->open($request->file('file'));
-        $zip->extractTo(Storage::disk('data')->path(''));
+        $zip->extractTo(Storage::disk('data')->path($this->path));
         $zip->close();
         return response('Success', 200);
     }
@@ -28,43 +30,43 @@ class FileController extends Controller
         $zip = new ZipArchive;
         $files = explode(',', $request->input('path'));
         $fileName = 'contents.zip';
-        if ($zip->open(Storage::disk('data')->path($fileName), ZipArchive::CREATE) == TRUE) {
+        if ($zip->open(Storage::disk('data')->path($this->path . '/' . $fileName), ZipArchive::CREATE) == TRUE) {
             foreach ($files as $file) {
-                if (File::isDirectory(Storage::disk('data')->path($file))) {
-                    $directoryPath = explode('/', $file);
-                    $this->addContent($zip, Storage::disk('data')->path($file), end($directoryPath));
+                if (File::isDirectory(Storage::disk('data')->path($this->path . '/' . $file))) {
+                    $directoryPath = explode('/', $this->path . '/' . $file);
+                    $this->addContent($zip, Storage::disk('data')->path($this->path . '/' . $file), end($directoryPath));
                 } else {
-                    $relativeName = basename($file);
-                    $zip->addFile(Storage::disk('data')->path($file), $relativeName);
+                    $relativeName = basename($this->path . '/' . $file);
+                    $zip->addFile(Storage::disk('data')->path($this->path . '/' . $file), $relativeName);
                 }
             }
             $zip->close();
         }
-        return response()->download(Storage::disk('data')->path($fileName))->deleteFileAfterSend(true);
+        return response()->download(Storage::disk('data')->path($this->path . '/' . $fileName))->deleteFileAfterSend(true);
     }
 
     public function readFile(Request $request) {
-        return Storage::disk('data')->download($request->input('path'));
+        return Storage::disk('data')->download($this->path . '/' . $request->input('path'));
     }
 
     public function createFolder(Request $request) {
-        Storage::disk('data')->makeDirectory($request->input('newFileName'));
+        Storage::disk('data')->makeDirectory($this->path . '/' . $request->input('newFileName'));
     }
 
     public function createFile(Request $request) {
-        Storage::disk('data')->put($request->input('newFileName'), '');
+        Storage::disk('data')->put($this->path . '/' . $request->input('newFileName'), '');
     }
 
     public function renameFile(Request $request) {
-        Storage::disk('data')->move($request->input('oldFileName'), $request->input('newFileName'));
+        Storage::disk('data')->move($this->path . '/' . $request->input('oldFileName'), $this->path . '/' . $request->input('newFileName'));
     }
 
     public function deleteFiles(Request $request) {
         foreach ($request->input('fileNames') as $file) {
-            if (File::isDirectory(Storage::disk('data')->path($file))) {
-                File::deleteDirectory(Storage::disk('data')->path($file));
+            if (File::isDirectory(Storage::disk('data')->path($this->path . '/' . $file))) {
+                File::deleteDirectory(Storage::disk('data')->path($this->path . '/' . $file));
             } else {
-                Storage::disk('data')->delete($file);
+                Storage::disk('data')->delete($this->path . '/' . $file);
             }
         }
     }
@@ -98,6 +100,6 @@ class FileController extends Controller
     }
 
     public function editFile(Request $request) {
-        file_put_contents(Storage::disk('data')->path($request->input('path')), $request->input('content'));
+        file_put_contents(Storage::disk('data')->path($this->path . '/' . $request->input('path')), $request->input('content'));
     }
 }
