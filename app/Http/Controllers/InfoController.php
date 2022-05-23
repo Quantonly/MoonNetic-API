@@ -36,9 +36,9 @@ class InfoController extends Controller
             $website->server_ip = $serverIp;
             $website->sftp_username = $sftpUsername;
             $website->sftp_password = $sftpPassword;
-            $website->sftp_host = 'moonnetic.com';
+            $website->sftp_host = 'server1.moonnetic.com';
             $website->sftp_port = '22';
-            $website->php_host = 'moonnetic.com';
+            $website->php_host = 'server1.moonnetic.com';
             $website->php_database = $phpDatabase;
             $website->php_username = $phpUsername;
             $website->php_password = $phpPassword;
