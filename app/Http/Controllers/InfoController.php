@@ -19,28 +19,35 @@ class InfoController extends Controller
     public function createWebsite(Request $request) {
         $user = Auth::user();
         $serverIp = '172.26.5.10';
+        $subDomain = $request->input('subDomain');
+        $phpVersion = $request->input('phpVersion');
         if (!WebsiteUser::where('user_id', '=', $user->id)->exists()) {
             if (WebsiteUser::where('sub_domain', '=', $request->input('subDomain'))->exists()) {
                 return response(null, 500);
             }
+            $sftpUsername = Str::random(10);
+            $sftpPassword = Str::random(10);
+            $phpDatabase = Str::random(10);
+            $phpUsername = $phpDatabase;
+            $phpPassword = Str::random(10);
             $website = new WebsiteUser;
             $website->user_id = $user->id;
-            $website->sub_domain = $request->input('subDomain');
+            $website->sub_domain = $subDomain;
             $website->server_ip = $serverIp;
-            $website->sftp_username = Str::random(10);
-            $website->sftp_password = Str::random(10);
+            $website->sftp_username = $sftpUsername;
+            $website->sftp_password = $sftpPassword;
             $website->sftp_host = 'moonnetic.com';
             $website->sftp_port = '22';
             $website->php_host = 'moonnetic.com';
-            $website->php_database = 'db_' . Str::random(10);
-            $website->php_username = Str::random(10);
-            $website->php_password = Str::random(10);
-            $website->php_version = $request->input('phpVersion');
+            $website->php_database = $phpDatabase;
+            $website->php_username = $phpUsername;
+            $website->php_password = $phpPassword;
+            $website->php_version = $phpVersion;
             $website->save();
-            $process = new Process(['/usr/scripts/create_website.sh']);
+            $process = new Process(['/usr/scripts/create_website.sh', $serverIp, $subDomain, $sftpUsername, $sftpPassword, $phpUsername, $phpPassword, $phpVersion]);
             $process->run();
             if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
+               throw new ProcessFailedException($process);
             }
             return response('Success', 200);
         }
