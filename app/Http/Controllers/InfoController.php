@@ -17,8 +17,9 @@ class InfoController extends Controller
     }
 
     public function setStoragePermissions(Request $request) {
+        $user = Auth::user();
         $serverIp = '172.26.5.10';
-        $subDomain = $request->input('subDomain');
+        $subDomain = WebsiteUser::where('user_id', '=', $user->id)->get()->sub_domain;
         $process = new Process(['/usr/scripts/set_storage_permissions.sh', $serverIp, $subDomain]);
         $process->run();
         if (!$process->isSuccessful()) {
