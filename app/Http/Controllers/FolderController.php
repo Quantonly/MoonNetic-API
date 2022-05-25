@@ -18,7 +18,7 @@ class FolderController extends Controller
 
     public function getFolder(Request $request) {
         $path = $this->subDomain.'/'.$this->subDomain;
-        $domain = $this->subDomain;
+        $subDomain = $this->subDomain;
         $directories = Storage::disk('data')->allDirectories($path);
         $files = Storage::disk('data')->allFiles($path);
         foreach ($directories as $key => $directory) {
