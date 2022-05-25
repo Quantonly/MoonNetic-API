@@ -18,6 +18,7 @@ class FolderController extends Controller
 
     public function getFolder(Request $request) {
         $path = $this->subDomain.'/'.$this->subDomain;
+        $domain = $this->subDomain;
         $directories = Storage::disk('data')->allDirectories($path);
         $files = Storage::disk('data')->allFiles($path);
         foreach ($directories as $key => $directory) {
@@ -26,6 +27,6 @@ class FolderController extends Controller
         foreach ($files as $key => $file) {
            $files[$key] = str_replace($path.'/', '', $file);
         }
-        return response()->json(compact('directories', 'files'));
+        return response()->json(compact('directories', 'files', 'subDomain'));
     }
 }
