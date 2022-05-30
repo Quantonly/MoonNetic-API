@@ -70,7 +70,7 @@ class InfoController extends Controller
         $user = Auth::user();
         $website = WebsiteUser::where('user_id', '=', $user->id)->first();
         WebsiteUser::where('user_id', '=', $user->id)->delete();
-        $process = new Process(['/usr/scripts/delete_website.sh', $website->server_ip, $website->$sub_domain, $website->$sftp_username, $website->$sftp_password, $website->$php_username, $website->$php_password, $website->$php_version]);
+        $process = new Process(['/usr/scripts/delete_website.sh', $website->server_ip, $website->sub_domain, $website->sftp_username, $website->sftp_password, $website->php_username, $website->php_password, $website->php_version]);
         $process->run();
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
