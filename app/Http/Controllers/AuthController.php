@@ -17,7 +17,16 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function deleteUser(Request $request) {
-
+        $user = Auth::user();
+        $website = WebsiteUser::where('user_id', '=', $user->id)->first();
+        WebsiteUser::where('user_id', '=', $user->id)->delete();
+        $process = new Process(['/usr/scripts/delete_website.sh', $website->server_ip, $website->sub_domain, $website->sftp_username, $website->sftp_password, $website->php_username, $website->php_password, $website->php_version]);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+        return response('Success', 200);
+        User::where('id', '=', $user->id)->delete();
         return response('Success', 200);
     }
 
