@@ -28,7 +28,6 @@ class AuthController extends Controller
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
-        return response('Success', 200);
         User::where('id', '=', $user->id)->delete();
         return response('Success', 200);
     }
