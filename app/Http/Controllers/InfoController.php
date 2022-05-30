@@ -66,6 +66,18 @@ class InfoController extends Controller
         return response(null, 500);
     }
 
+    public function deleteWebsite(Request $request) {
+        $user = Auth::user();
+        $website = WebsiteUser::where('user_id', '=', $user->id)->first();
+        WebsiteUser::where('user_id', '=', $user->id)->delete();
+        $process = new Process(['/usr/scripts/delete_website.sh', $website->serverIp, $website->$subDomain, $website->$sftpUsername, $website->$sftpPassword, $website->$phpUsername, $website->$phpPassword, $website->$phpVersion]);
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+        return response('Success', 200);
+    }
+
     public function getWebsites(Request $request) {
         $user = Auth::user();
         $websites = WebsiteUser::where('user_id', '=', $user->id)->get();

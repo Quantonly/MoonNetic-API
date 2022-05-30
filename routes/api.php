@@ -22,6 +22,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('logout', [App\Http\Controllers\AuthController::class, 'logout']);
     Route::get('refresh', [App\Http\Controllers\AuthController::class, 'refresh']);
     Route::get('user', [App\Http\Controllers\AuthController::class, 'getUser']);
+    Route::post('edituser', [App\Http\Controllers\AuthController::class, 'editUser']);
+    Route::get('deleteuser', [App\Http\Controllers\AuthController::class, 'deleteUser']);
 });
 
 Route::get('/folder', [App\Http\Controllers\FolderController::class, 'getFolder']);
@@ -36,6 +38,7 @@ Route::post('/editfile', [App\Http\Controllers\FileController::class, 'editfile'
 
 Route::post('/setstoragepermissions', [App\Http\Controllers\InfoController::class, 'setStoragePermissions']);
 Route::post('/createwebsite', [App\Http\Controllers\InfoController::class, 'createWebsite']);
+Route::get('/deletewebsite', [App\Http\Controllers\InfoController::class, 'deleteWebsite']);
 Route::get('/getwebsites', [App\Http\Controllers\InfoController::class, 'getWebsites']);
 Route::get('/getsftp', [App\Http\Controllers\InfoController::class, 'getSFTP']);
 Route::get('/getphp', [App\Http\Controllers\InfoController::class, 'getPHP']);

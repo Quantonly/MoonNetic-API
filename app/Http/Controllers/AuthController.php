@@ -16,6 +16,17 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function deleteUser(Request $request) {
+
+        return response('Success', 200);
+    }
+
+    public function editUser(Request $request) {
+        $user = Auth::user();
+        User::where('id', '=', $user->id)->update(['name' => $request->displayName]);
+        return response('Success', 200);
+    }
+
     public function register(Request $request) {
         if (User::where('email', '=', $request->email)->exists()) {
             return response(null, 500);
